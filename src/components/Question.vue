@@ -1,7 +1,17 @@
 <template>
-<v-container>
+<v-container v-if="questions.length > 0">
+    <div class="question">{{questions[0].question}}</div>
     <v-row>
-      {{questions_result}}
+      <v-col
+        v-for="item in questions[0].answers"
+          :key="item.id"
+          cols="12"
+          sm="4"
+          offset-sm="4">
+        <v-card hover>
+          <v-card-title v-on:click="checkSuccess(item)">{{item.answer}}</v-card-title>
+        </v-card>
+      </v-col>
     </v-row>
    </v-container>
 </template>
@@ -12,14 +22,50 @@ export default {
   name: 'Question',
   data(){
     return {
-      questions_result: null
+      questions_result: null,
+      questions: []
     }
   },
   mounted () {
       axios
         .get('https://opentdb.com/api.php?amount=10&category=' + this.$route.params.category + '&type=multiple')
-        .then(response => (this.questions_result = response.data.results))
+        .then(response => {
+          this.questions_result = response.data.results
+            const question = this.questions_result[0];
+            let answers = []
+            let random = Math.floor((Math.random() * 4) + 1);
+            let correct_inserted = false;
+            for (let j = 0; j < this.questions_result[0].incorrect_answers.length; j++) {
+              const answer = this.questions_result[0].incorrect_answers[j];
+                answers.push({
+                  answer: answer,
+                  correct: false
+                })
+                if (random == answers.length + 1) {
+                  answers.push({
+                    answer: this.questions_result[0].correct_answer,
+                    correct: true
+                  })
+                  correct_inserted = true;
+                }          
+            }
+            if(!correct_inserted){
+              answers.push({
+                    answer: this.questions_result[0].correct_answer,
+                    correct: true
+                  })
+            }            
+            this.questions.push({
+              question: question.question,
+              answers: answers
+            });
+        })
   },
+  methods : {
+    checkSuccess(answer){
+      if (answer.correct) alert('Correct!')
+    }
+  }
 }
 </script>
 
@@ -53,7 +99,9 @@ a {
   padding: 1rem;
 }
 
-.footer {
-  margin-top: 1rem;
+.question{
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500; 
 }
 </style>
