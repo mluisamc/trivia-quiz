@@ -1,4 +1,4 @@
-# trivial
+# Trivia quiz
 
 ## Project setup
 ```
