@@ -12,6 +12,7 @@
       </v-col>
     </v-row>
     {{questions_result}}
+    <div class="footer">Fork me on <a href="https://github.com/mluisamc/trivia-quiz">GitHub</a></div>
   </v-container>
 </template>
 
@@ -57,7 +58,7 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #2c3e50;
 }
 .v-card{
   color: #2c3e50 !important;
@@ -71,5 +72,9 @@ a {
 
 .v-card__title{
   padding: 1rem;
+}
+
+.footer {
+  margin-top: 1rem;
 }
 </style>
