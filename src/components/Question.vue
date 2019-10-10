@@ -1,39 +1,25 @@
 <template>
 <v-container>
     <v-row>
-      <v-col
-        v-for="item in info"
-          :key="item.id"
-          cols="12"
-          sm="4">
-        <v-card hover>
-          <v-card-title v-on:click="questions(item.id)">{{item.name}}</v-card-title>
-        </v-card>
-      </v-col>
+      {{questions_result}}
     </v-row>
-    <div class="footer">Fork me on <a href="https://github.com/mluisamc/trivia-quiz">GitHub</a></div>
-  </v-container>
+   </v-container>
 </template>
 
 <script>
 import axios from 'axios'
 export default {
-  name: 'Categories',
+  name: 'Question',
   data(){
     return {
-      info: null
+      questions_result: null
     }
   },
   mounted () {
-    axios
-      .get('https://opentdb.com/api_category.php')
-      .then(response => (this.info = response.data.trivia_categories))
+      axios
+        .get('https://opentdb.com/api.php?amount=10&category=' + this.$route.params.category + '&type=multiple')
+        .then(response => (this.questions_result = response.data.results))
   },
-  methods: {
-    questions(category){
-      this.$router.push({name: 'questions', params : { category: category}});
-    }
-  }
 }
 </script>
 
