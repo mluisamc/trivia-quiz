@@ -11,7 +11,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <div class="footer">Fork me on <a href="https://github.com/mluisamc/trivia-quiz">GitHub</a></div>
+    <div class="footer" v-if="ready">Fork me on <a href="https://github.com/mluisamc/trivia-quiz">GitHub</a></div>
   </v-container>
 </template>
 
@@ -21,13 +21,17 @@ export default {
   name: 'Categories',
   data(){
     return {
-      info: null
+      info: null,
+      ready: false
     }
   },
   mounted () {
     axios
       .get('https://opentdb.com/api_category.php')
-      .then(response => (this.info = response.data.trivia_categories))
+      .then(response => {
+        this.info = response.data.trivia_categories; 
+        this.ready = true;
+      })
   },
   methods: {
     questions(category){
