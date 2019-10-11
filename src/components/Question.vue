@@ -9,7 +9,9 @@
           sm="4"
           offset-sm="4">
         <v-card hover>
-          <v-card-title v-on:click="checkSuccess(item)">{{item.answer}}</v-card-title>
+          <v-card-title 
+            v-bind:class="{ green: success && index == item, red: success !== null && !success && index == item }" 
+            v-on:click="checkSuccess(item)">{{item.answer}}</v-card-title>
         </v-card>
       </v-col>
     </v-row>
@@ -23,7 +25,9 @@ export default {
   data(){
     return {
       questions_result: null,
-      questions: []
+      questions: [],
+      success: null,
+      index : null
     }
   },
   mounted () {
@@ -63,7 +67,13 @@ export default {
   },
   methods : {
     checkSuccess(answer){
-      if (answer.correct) alert('Correct!')
+      if (answer.correct) {
+        this.success = true;
+      }
+      else {
+        this.success = false;
+      }
+      this.index = answer;
     }
   }
 }
@@ -103,5 +113,13 @@ a {
   margin-bottom: 1rem;
   font-size: 1.2rem;
   font-weight: 500; 
+}
+
+.green {
+  background-color: #9ed79e;
+}
+
+.red {
+  background-color: #f09a9a;
 }
 </style>
