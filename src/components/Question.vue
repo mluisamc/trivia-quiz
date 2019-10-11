@@ -1,6 +1,6 @@
 <template>
 <v-container v-if="questions.length > 0">
-    <div class="question">{{questions[0].question}}</div>
+    <div class="question">{{decode(questions[0].question)}}</div>
     <v-row>
       <v-col
         v-for="item in questions[0].answers"
@@ -11,7 +11,7 @@
         <v-card hover>
           <v-card-title 
             v-bind:class="{ green: success && index == item, red: success !== null && !success && index == item }" 
-            v-on:click="checkSuccess(item)">{{item.answer}}</v-card-title>
+            v-on:click="checkSuccess(item)">{{decode(item.answer)}}</v-card-title>
         </v-card>
       </v-col>
     </v-row>
@@ -74,6 +74,11 @@ export default {
         this.success = false;
       }
       this.index = answer;
+    },
+    decode(html){
+      var txt = document.createElement('textarea');
+      txt.innerHTML = html;
+      return txt.value;
     }
   }
 }
