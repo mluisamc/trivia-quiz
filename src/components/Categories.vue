@@ -69,6 +69,7 @@ a {
 
 .v-card__title{
   padding: 1rem;
+  word-break: normal;
 }
 
 .footer {
