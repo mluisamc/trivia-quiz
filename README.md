@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/825f3235-1d92-487d-8ab9-e6e9428e9aac/deploy-status)](https://app.netlify.com/sites/trivia-quiz-mluisamc/deploys)
+
 # Trivia quiz
 
 ## Project setup
