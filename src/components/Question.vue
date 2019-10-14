@@ -1,9 +1,9 @@
 <template>
 <v-container v-if="questions.length > 0">
-    <div class="question">{{decode(questions[0].question)}}</div>
+    <div class="question">{{decode(questions[question_number].question)}}</div>
     <v-row>
       <v-col
-        v-for="item in questions[0].answers"
+        v-for="item in questions[question_number].answers"
           :key="item.id"
           cols="12"
           sm="4"
@@ -27,7 +27,8 @@ export default {
       questions_result: null,
       questions: [],
       success: null,
-      index : null
+      index : null,
+      question_number: 0
     }
   },
   mounted () {
@@ -35,19 +36,19 @@ export default {
         .get('https://opentdb.com/api.php?amount=10&category=' + this.$route.params.category + '&type=multiple')
         .then(response => {
           this.questions_result = response.data.results
-            const question = this.questions_result[0];
+          for (let i = 0; i < this.questions_result.length; i++) {
             let answers = []
             let random = Math.floor((Math.random() * 4) + 1);
             let correct_inserted = false;
-            for (let j = 0; j < this.questions_result[0].incorrect_answers.length; j++) {
-              const answer = this.questions_result[0].incorrect_answers[j];
+            for (let j = 0; j < this.questions_result[i].incorrect_answers.length; j++) {
+              const answer = this.questions_result[i].incorrect_answers[j];
                 answers.push({
                   answer: answer,
                   correct: false
                 })
                 if (random == answers.length + 1) {
                   answers.push({
-                    answer: this.questions_result[0].correct_answer,
+                    answer: this.questions_result[i].correct_answer,
                     correct: true
                   })
                   correct_inserted = true;
@@ -55,14 +56,15 @@ export default {
             }
             if(!correct_inserted){
               answers.push({
-                    answer: this.questions_result[0].correct_answer,
+                    answer: this.questions_result[i].correct_answer,
                     correct: true
                   })
             }            
             this.questions.push({
-              question: question.question,
+              question: this.questions_result[i].question,
               answers: answers
             });
+          }
         })
   },
   methods : {
@@ -74,6 +76,11 @@ export default {
         this.success = false;
       }
       this.index = answer;
+      var self = this;
+      setTimeout(function(){ 
+        self.question_number = self.question_number + 1; 
+        self.success = null;
+        }, 1000);      
     },
     decode(html){
       var txt = document.createElement('textarea');
