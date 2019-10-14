@@ -28,7 +28,8 @@ export default {
       questions: [],
       success: null,
       index : null,
-      question_number: 0
+      question_number: 0,
+      result: 0
     }
   },
   mounted () {
@@ -42,17 +43,17 @@ export default {
             let correct_inserted = false;
             for (let j = 0; j < this.questions_result[i].incorrect_answers.length; j++) {
               const answer = this.questions_result[i].incorrect_answers[j];
-                answers.push({
-                  answer: answer,
-                  correct: false
-                })
                 if (random == answers.length + 1) {
                   answers.push({
                     answer: this.questions_result[i].correct_answer,
                     correct: true
                   })
                   correct_inserted = true;
-                }          
+                }
+                answers.push({
+                  answer: answer,
+                  correct: false
+                })      
             }
             if(!correct_inserted){
               answers.push({
@@ -77,10 +78,17 @@ export default {
       }
       this.index = answer;
       var self = this;
-      setTimeout(function(){ 
-        self.question_number = self.question_number + 1; 
-        self.success = null;
-        }, 1000);      
+      if (this.question_number !== 9){
+        setTimeout(function(){ 
+          self.question_number = self.question_number + 1; 
+          self.success = null;
+          }, 1000);  
+      }
+      else {
+        setTimeout(function(){ 
+          self.$router.push({name: 'result', params : { result: self.result}});
+          }, 1000);
+      } 
     },
     decode(html){
       var txt = document.createElement('textarea');
