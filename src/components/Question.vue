@@ -72,6 +72,7 @@ export default {
     checkSuccess(answer){
       if (answer.correct) {
         this.success = true;
+        this.result++;
       }
       else {
         this.success = false;
@@ -80,13 +81,13 @@ export default {
       var self = this;
       if (this.question_number !== 9){
         setTimeout(function(){ 
-          self.question_number = self.question_number + 1; 
+          self.question_number++; 
           self.success = null;
           }, 1000);  
       }
       else {
         setTimeout(function(){ 
-          self.$router.push({name: 'result', params : { result: self.result}});
+          self.$router.push({name: 'result', params : { result: self.result * 10}});
           }, 1000);
       } 
     },
